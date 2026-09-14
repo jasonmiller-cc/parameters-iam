@@ -31,8 +31,11 @@ clean:
 	rm -rf bin/ coverage.out
 
 docker-build:
-	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) \
-	  -t parameters-iam:$(VERSION) -t parameters-iam:latest .
+	docker buildx build \
+	  --build-context parameters-core=../parameters-core \
+	  --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) \
+	  -t parameters-iam:$(VERSION) -t parameters-iam:latest \
+	  --load .
 
 docker-run:
 	docker run --rm -p 8080:8080 parameters-iam:latest
